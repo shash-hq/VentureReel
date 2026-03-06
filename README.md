@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# VentureReel 🎥 
+A curated, high-performance directory for founder stories, startup pitches, and tech insights.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Live Demo
+[VentureReel - Live Deployment](#) *(Deployment pending on Railway)*
 
-## About Laravel
+## Tech Stack
+VentureReel is a modern server-rendered application built for speed, SEO, and robust data management.
+* **Core Framework:** Laravel (PHP)
+* **Database:** MySQL
+* **Frontend templating:** Blade
+* **Reactivity:** AlpineJS
+* **Styling:** Tailwind CSS
+* **External APIs:** YouTube Data API v3
+* **Transactional Email:** Resend emails
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Key Features
+* **YouTube Hybrid Search with One-Click Import:** Search for any founder or company. Our engine checks the local database first and gracefully falls back to a live YouTube API search. Import any public video directly into the platform with full metadata ingestion in a single click.
+* **Founder Collections:** Curate groups of related videos (e.g., "Y Combinator 2024", "Fintech Disruptors") with an integrated follow/subscription system.
+* **Personalized Recommendations:** We track authenticated user search histories and dynamically render a tailored "Based on your searches" feed.
+* **Email Verification via Resend:** Secure user accounts via strict RFC email validation and automated OTP/Verification emails dispatched globally using the Resend API.
+* **Glassmorphism UI & Dark Mode:** A stunning, CSS-native frosted glass aesthetic mapped perfectly across both light and dark native OS modes natively integrated using Tailwind.
+* **Admin Analytics Dashboard:** A protected administrative command center highlighting Daily Active Users (DAU), top trending videos, platform aggregates, and collection management via intuitive internal REST controllers.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Architecture
+VentureReel operates on a clean, scalable Model-View-Controller (MVC) architecture ensuring strong separation of concerns:
+**Routes → Middleware → Controller → Service → Model → Blade View**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Routing & Middleware:** Web and Auth routes dictate access, firmly protected by rate limiters (Throttle), Content Security Policies, and Auth/Admin verification middleware.
+* **Controllers:** Lean, single-responsibility PHP classes that orchestrate data gathering and parameter sanitation.
+* **Services:** Heavy external logic (e.g., executing YouTube API fetches or image caching logic) is abstracted directly into dedicated service classes like `YouTubeService.php`.
+* **Models:** Eloquent ORM bindings defining relationships between Users, Videos, Comments, and pivoting polymorphic Collections.
+* **Views:** Server-rendered HTML utilizing Blade templating tightly coupled with scoped AlpineJS states for rapid browser interactions without heavy client-side Javascript frameworks.
 
-## Learning Laravel
+## Local Setup
+Get VentureReel running locally in a few minutes.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**1. Clone the repository**
+```bash
+git clone https://github.com/shash-hq/VentureReel.git
+cd VentureReel
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**2. Install Dependencies**
+```bash
+composer install
+npm install
+```
 
-## Laravel Sponsors
+**3. Configure Environment**
+Copy the standard environment variables template:
+```bash
+cp .env.example .env
+```
+Generate your application key:
+```bash
+php artisan key:generate
+```
+Open the `.env` file and configure your local database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`), mailer credentials (`RESEND_KEY`), and your Google Cloud project's API key (`YOUTUBE_API_KEY`).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**4. Run Migrations & Seeders**
+Bootstrap the database schema and populate the platform with initial foundational data:
+```bash
+php artisan migrate:fresh --seed
+```
 
-### Premium Partners
+**5. Start the Server**
+Launch the local PHP server and Vite hot module replacement (HMR) for frontend assets. (Run these in separate terminal windows).
+```bash
+php artisan serve
+npm run dev
+```
+Navigate to `http://localhost:8000` or `http://127.0.0.1:8000` to view the application.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Screenshots
+<br>
 
-## Contributing
+**(Application UI Screenshots — Space reserved for post-deployment production captures)*.*
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<br>
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Author
+Built by [Shashank Ranjan](https://github.com/shash-hq).
