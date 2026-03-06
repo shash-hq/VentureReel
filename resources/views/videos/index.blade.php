@@ -2,28 +2,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
 
         @if(!request('search') && !request('category'))
-            {{-- Stories Row --}}
-            <div class="flex items-center gap-4 sm:gap-5 py-5 overflow-x-auto no-scrollbar scroll-smooth mb-2">
-                {{-- Add Your Story --}}
-                <a href="{{ route('videos.create') }}" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
-                    <div class="w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center bg-transparent group-hover:border-brand transition-colors">
-                        <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-brand transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    </div>
-                    <span class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 group-hover:text-brand transition-colors">Your Story</span>
-                </a>
-
-                {{-- Top Users --}}
-                @php $topUsers = \App\Models\User::has('videos')->withCount('videos')->orderByDesc('videos_count')->take(8)->get(); @endphp
-                @foreach($topUsers as $user)
-                <a href="{{ route('user.profile', $user) }}" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
-                    <div class="p-[2px] rounded-full bg-gradient-to-tr from-brand via-rose-500 to-amber-500 group-hover:scale-105 transition-transform">
-                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-[60px] h-[60px] sm:w-[64px] sm:h-[64px] rounded-full border-[3px] border-white dark:border-dark-bg object-cover" loading="lazy">
-                    </div>
-                    <span class="text-[11px] font-medium text-gray-600 dark:text-gray-400 truncate w-16 text-center">{{ explode(' ', $user->name)[0] }}</span>
-                </a>
-                @endforeach
-            </div>
-
             {{-- Featured Video Hero --}}
             @if($videos->count() > 0)
                 @php $featuredVideo = $videos->first(); @endphp
