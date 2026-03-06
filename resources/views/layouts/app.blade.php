@@ -56,6 +56,20 @@
                     </div>
                 @endif
 
+                {{-- Unverified Email Banner --}}
+                @if (auth()->check() && !auth()->user()->hasVerifiedEmail())
+                    <div class="bg-yellow-50 dark:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-xl mx-4 sm:mx-6 mt-4 sm:mt-6 px-4 py-4 text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-yellow-800 dark:text-yellow-200">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            <span>Please verify your email address to upload videos and bookmark content.</span>
+                        </div>
+                        <form method="POST" action="{{ route('verification.send') }}" class="inline m-0">
+                            @csrf
+                            <button type="submit" class="font-semibold underline hover:text-yellow-900 dark:hover:text-white whitespace-nowrap">Resend email</button>
+                        </form>
+                    </div>
+                @endif
+
                 {{ $slot }}
             </main>
         </div>

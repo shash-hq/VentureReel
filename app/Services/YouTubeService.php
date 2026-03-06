@@ -32,14 +32,27 @@ class YouTubeService
             return null;
         }
 
-        return Cache::remember("yt_video_{$videoId}", 3600, function () use ($videoId) {
+        $cacheKey = "yt_video_{$videoId}";
+
+        if (Cache::has($cacheKey)) {
+            \Illuminate\Support\Facades\Log::info("YouTube API: video details for '{$videoId}' served from CACHE");
+            return Cache::get($cacheKey);
+        }
+
+        try {
             $response = Http::get("{$this->baseUrl}/videos", [
                 'key' => $this->apiKey,
                 'id' => $videoId,
                 'part' => 'snippet,contentDetails,statistics',
             ]);
 
+            if ($response->status() === 403) {
+                \Illuminate\Support\Facades\Log::warning("YouTube API Quota Exceeded (403) for getVideoDetails", ['video_id' => $videoId]);
+                return null;
+            }
+
             if (!$response->successful()) {
+                \Illuminate\Support\Facades\Log::error("YouTube API Error for getVideoDetails", ['status' => $response->status()]);
                 return null;
             }
 
@@ -53,7 +66,7 @@ class YouTubeService
             $stats = $item['statistics'] ?? [];
             $details = $item['contentDetails'] ?? [];
 
-            return [
+            $data = [
                 'title' => $snippet['title'] ?? '',
                 'description' => $snippet['description'] ?? '',
                 'channel_title' => $snippet['channelTitle'] ?? '',
@@ -63,7 +76,15 @@ class YouTubeService
                 'view_count' => (int) ($stats['viewCount'] ?? 0),
                 'like_count' => (int) ($stats['likeCount'] ?? 0),
             ];
-        });
+
+            Cache::put($cacheKey, $data, 86400); // 24 hours
+            \Illuminate\Support\Facades\Log::info("YouTube API: video details for '{$videoId}' fetched LIVE");
+
+            return $data;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("YouTube API Exception: " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -72,12 +93,20 @@ class YouTubeService
     public function searchVideos(string $query, int $maxResults = 10, ?string $publishedAfter = null): array
     {
         if (!$this->isConfigured()) {
-            return [];
+            return ['results' => [], 'cached' => false];
         }
 
         $cacheKey = 'yt_search_' . md5($query . $maxResults . $publishedAfter);
 
-        return Cache::remember($cacheKey, 3600, function () use ($query, $maxResults, $publishedAfter) {
+        if (Cache::has($cacheKey)) {
+            \Illuminate\Support\Facades\Log::info("YouTube API: search for '{$query}' served from CACHE");
+            return [
+                'results' => Cache::get($cacheKey),
+                'cached' => true
+            ];
+        }
+
+        try {
             $params = [
                 'key' => $this->apiKey,
                 'q' => $query,
@@ -94,11 +123,17 @@ class YouTubeService
 
             $response = Http::get("{$this->baseUrl}/search", $params);
 
-            if (!$response->successful()) {
-                return [];
+            if ($response->status() === 403) {
+                \Illuminate\Support\Facades\Log::warning("YouTube API Quota Exceeded (403) on Search", ['query' => $query]);
+                return ['results' => [], 'cached' => false];
             }
 
-            return collect($response->json('items', []))->map(function ($item) {
+            if (!$response->successful()) {
+                \Illuminate\Support\Facades\Log::error("YouTube API Error on Search", ['status' => $response->status()]);
+                return ['results' => [], 'cached' => false];
+            }
+
+            $results = collect($response->json('items', []))->map(function ($item) {
                 $snippet = $item['snippet'] ?? [];
                 return [
                     'video_id' => $item['id']['videoId'] ?? '',
@@ -110,16 +145,25 @@ class YouTubeService
                     'youtube_url' => 'https://www.youtube.com/watch?v=' . ($item['id']['videoId'] ?? ''),
                 ];
             })->toArray();
-        });
+
+            Cache::put($cacheKey, $results, 86400); // 24 hours TTL
+            \Illuminate\Support\Facades\Log::info("YouTube API: search for '{$query}' fetched LIVE");
+
+            return [
+                'results' => $results,
+                'cached' => false
+            ];
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("YouTube API Exception on Search: " . $e->getMessage());
+            return ['results' => [], 'cached' => false];
+        }
     }
 
-    /**
-     * Get trending startup/founder videos from this week.
-     */
     public function getTrendingStartupVideos(int $maxResults = 8): array
     {
         $oneWeekAgo = now()->subDays(7)->toIso8601String();
-        return $this->searchVideos('startup founder talk pitch', $maxResults, $oneWeekAgo);
+        $response = $this->searchVideos('startup founder talk pitch', $maxResults, $oneWeekAgo);
+        return $response['results'] ?? [];
     }
 
     /**

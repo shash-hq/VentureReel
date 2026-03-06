@@ -107,5 +107,68 @@
             </div>
         @endif
 
+        {{-- Bookmarks Section --}}
+        <div class="mt-16 mb-8 pb-4 border-b border-gray-200 dark:border-white/5">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Bookmarked Videos</h2>
+        </div>
+
+        @if($bookmarks->count() > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                @foreach($bookmarks as $video)
+                    <x-video-card :video="$video" />
+                @endforeach
+            </div>
+            
+            @if($bookmarks->hasPages())
+                <div class="mt-8">
+                    {{ $bookmarks->appends(request()->except('bookmarks_page'))->links() }}
+                </div>
+            @endif
+        @else
+            <div class="text-center py-12 bg-gray-50 dark:bg-dark-surface rounded-2xl border border-gray-100 dark:border-dark-border">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No bookmarks</h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Save videos to watch them later here.</p>
+            </div>
+        @endif
+
+        {{-- Followed Collections Section --}}
+        <div class="mt-16 mb-8 pb-4 border-b border-gray-200 dark:border-white/5">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Followed Collections</h2>
+        </div>
+
+        @if($collections->count() > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                @foreach($collections as $collection)
+                    <a href="{{ route('collections.show', $collection) }}" class="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-gray-100 dark:bg-dark-surface border border-gray-200 dark:border-white/5">
+                        @if($collection->cover_image)
+                            <img src="{{ $collection->cover_image }}" alt="{{ $collection->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-dark-bg text-gray-400 group-hover:bg-gray-300 transition-colors">
+                                <svg class="h-10 w-10 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            </div>
+                        @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <h3 class="text-white font-bold text-lg line-clamp-1 group-hover:text-brand transition-colors">{{ $collection->title }}</h3>
+                            <p class="text-gray-300 text-xs mt-1">{{ $collection->videos_count }} videos</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+            
+            @if($collections->hasPages())
+                <div class="mt-8">
+                    {{ $collections->appends(request()->except('collections_page'))->links() }}
+                </div>
+            @endif
+        @else
+            <div class="text-center py-12 bg-gray-50 dark:bg-dark-surface rounded-2xl border border-gray-100 dark:border-dark-border">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No followed collections</h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Follow curated collections to see them here.</p>
+            </div>
+        @endif
+
     </div>
 </x-app-layout>

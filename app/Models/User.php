@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -51,6 +52,21 @@ class User extends Authenticatable
     public function bookmarkedVideos(): BelongsToMany
     {
         return $this->belongsToMany(Video::class, 'bookmarks')->withTimestamps();
+    }
+
+    public function searchHistories(): HasMany
+    {
+        return $this->hasMany(SearchHistory::class);
+    }
+
+    public function activity(): HasMany
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    public function followedCollections(): BelongsToMany
+    {
+        return $this->belongsToMany(Collection::class);
     }
 
     // ── Helpers ──

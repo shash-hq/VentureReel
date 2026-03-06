@@ -1,22 +1,107 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto pb-12 pt-4">
         
-        <div class="mb-10 text-center sm:text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Admin Dashboard</h1>
-                <p class="mt-2 text-gray-500 dark:text-gray-400">Review and moderate video submissions.</p>
+                <p class="mt-2 text-gray-500 dark:text-gray-400">Platform metrics and moderation queue.</p>
             </div>
-            
-            <div class="flex items-center justify-center gap-4 text-sm font-medium">
-                <div class="px-4 py-2 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl">
-                    <span class="text-gray-500 dark:text-gray-400 block text-xs uppercase tracking-wider mb-0.5">Pending</span>
-                    <span class="text-xl text-yellow-600 dark:text-yellow-500">{{ \App\Models\Video::where('is_approved', false)->count() }}</span>
-                </div>
-                <div class="px-4 py-2 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl">
-                    <span class="text-gray-500 dark:text-gray-400 block text-xs uppercase tracking-wider mb-0.5">Approved</span>
-                    <span class="text-xl text-green-600 dark:text-green-500">{{ \App\Models\Video::where('is_approved', true)->count() }}</span>
+        </div>
+
+        {{-- Top Level Metrics --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- Total Videos -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+                <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Videos</span>
+                <div class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($stats['total_videos']) }}</div>
+            </div>
+            <!-- Total Users -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+                <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Users</span>
+                <div class="mt-2 text-3xl font-bold text-brand">{{ number_format($stats['total_users']) }}</div>
+            </div>
+            <!-- Pending Videos -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+                <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Pending Approval</span>
+                <div class="mt-2 text-3xl font-bold text-yellow-600 dark:text-yellow-500">{{ number_format($stats['pending_videos']) }}</div>
+            </div>
+            <!-- DAU Chart -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+                <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">DAU (7 Days)</span>
+                <div class="mt-3 flex items-end justify-between h-8 gap-1.5">
+                    @php $maxDAU = max(1, max(array_values($dauChart))); @endphp
+                    @foreach($dauChart as $date => $count)
+                        <div class="w-full bg-brand/20 rounded-t relative group h-full flex items-end">
+                            <div class="w-full bg-brand rounded-t transition-all duration-500" style="height: {{ ($count / $maxDAU) * 100 }}%"></div>
+                            <div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] px-2 py-1 rounded pointer-events-none whitespace-nowrap z-10 transition-opacity">
+                                {{ \Carbon\Carbon::parse($date)->format('M d') }}: {{ $count }}
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
+        </div>
+
+        {{-- Detailed Data Grids --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Most Searched Keywords -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Top Searches</h3>
+                </div>
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                    @forelse($mostSearched as $search)
+                        <li class="px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-4">{{ $search->query }}</span>
+                            <span class="text-[11px] font-bold bg-brand/10 text-brand px-2 py-1 rounded-full shrink-0">{{ $search->count }}</span>
+                        </li>
+                    @empty
+                        <li class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No searches performed yet.</li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <!-- Most Viewed Videos -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Most Viewed</h3>
+                </div>
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                    @forelse($mostViewedVideos as $video)
+                        <li class="px-5 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <a href="{{ route('videos.show', $video) }}" class="flex flex-col gap-1 group" target="_blank">
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-200 line-clamp-1 group-hover:text-brand transition-colors">{{ $video->title }}</span>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400">{{ number_format($video->views_count) }} views</span>
+                            </a>
+                        </li>
+                    @empty
+                        <li class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No views recorded yet.</li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <!-- Newest Imports -->
+            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Recent YouTube Imports</h3>
+                </div>
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                    @forelse($newestImports as $video)
+                        <li class="px-5 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <a href="{{ route('videos.show', $video) }}" class="flex flex-col gap-1 group" target="_blank">
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-200 line-clamp-1 group-hover:text-brand transition-colors">{{ $video->title }}</span>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400">from {{ $video->channel_name }}</span>
+                            </a>
+                        </li>
+                    @empty
+                        <li class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No imports yet.</li>
+                    @endforelse
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Moderation Queue</h2>
         </div>
 
         @if($pendingVideos->count() > 0)

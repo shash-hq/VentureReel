@@ -20,6 +20,13 @@ class VideoController extends Controller
         $search = request('search');
         $categorySlug = request('category');
 
+        if ($search && auth()->check()) {
+            \App\Models\SearchHistory::create([
+                'user_id' => auth()->id(),
+                'query' => $search
+            ]);
+        }
+
         $videos = Video::approved()
             ->with(['user', 'category'])
             ->withCount('likes')
@@ -33,18 +40,50 @@ class VideoController extends Controller
 
         $categories = Category::withCount('approvedVideos')->get();
 
+        $recommendedVideos = collect();
+        if (!$search && !$categorySlug && auth()->check()) {
+            $latestQueries = \App\Models\SearchHistory::where('user_id', auth()->id())
+                ->latest()
+                ->pluck('query')
+                ->unique()
+                ->take(3);
+
+            if ($latestQueries->isNotEmpty()) {
+                $recommendedVideos = Video::approved()
+                    ->with(['user', 'category'])
+                    ->withCount('likes')
+                    ->where(function ($queryBuilder) use ($latestQueries) {
+                        foreach ($latestQueries as $q) {
+                            $queryBuilder->orWhere('title', 'like', "%{$q}%")
+                                         ->orWhere('description', 'like', "%{$q}%");
+                        }
+                    })
+                    ->latest()
+                    ->take(4)
+                    ->get();
+            }
+        }
+
+        $featuredCollections = collect();
+        if (!$search && !$categorySlug) {
+            $featuredCollections = \App\Models\Collection::withCount('videos')->has('videos')->latest()->take(4)->get();
+        }
+
         $youtubeResults = [];
+        $youtubeCached = false;
         if ($search) {
             $youtube = app(YouTubeService::class);
             if ($youtube->isConfigured()) {
-                $youtubeResults = collect($youtube->searchVideos($search, 12))->filter(function ($ytVideo) use ($videos) {
+                $searchData = $youtube->searchVideos($search, 12);
+                $youtubeCached = $searchData['cached'] ?? false;
+                $youtubeResults = collect($searchData['results'] ?? [])->filter(function ($ytVideo) use ($videos) {
                     // Filter out videos we already have locally to avoid duplicates in the same view
                     return !$videos->contains('youtube_video_id', $ytVideo['video_id']);
                 })->all();
             }
         }
 
-        return view('videos.index', compact('videos', 'categories', 'search', 'categorySlug', 'youtubeResults'));
+        return view('videos.index', compact('videos', 'categories', 'search', 'categorySlug', 'youtubeResults', 'youtubeCached', 'recommendedVideos', 'featuredCollections'));
     }
 
     /**
