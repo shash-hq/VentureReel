@@ -5,7 +5,7 @@
             {{-- Featured Video Hero --}}
             @if($videos->count() > 0)
                 @php $featuredVideo = $videos->first(); @endphp
-                <div class="mb-10 relative rounded-2xl sm:rounded-3xl overflow-hidden group border border-gray-200 dark:border-white/5">
+                <div class="mb-10 relative rounded-2xl sm:rounded-3xl overflow-hidden group border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out">
                     <a href="{{ route('videos.show', $featuredVideo) }}" class="block aspect-video sm:aspect-[2.35/1] relative">
                         <img src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}" class="w-full h-full object-cover transition-transform duration-[8s] ease-out group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/111/333?text=VentureReel';">
 
@@ -50,7 +50,7 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         @foreach($featuredCollections as $collection)
-                            <div class="group relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-dark-surface border border-gray-200 dark:border-white/5 flex flex-col h-full">
+                            <div class="group relative glass-card overflow-hidden flex flex-col h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out">
                                 <a href="{{ route('collections.show', $collection) }}" class="block aspect-[4/3] relative overflow-hidden shrink-0">
                                     @if($collection->cover_image)
                                         <img src="{{ $collection->cover_image }}" alt="{{ $collection->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
@@ -179,7 +179,7 @@
                         @endphp
                         
                         <a href="{{ route('videos.import', $ytVideo['video_id']) }}" class="group block h-full select-none cursor-pointer">
-                            <div class="relative bg-white dark:bg-dark-surface rounded-2xl sm:rounded-3xl p-3 border border-gray-100 dark:border-white/5 hover:border-brand/30 dark:hover:border-brand/30 hover:shadow-lg dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-300 transform group-hover:-translate-y-1 h-full flex flex-col">
+                            <div class="relative glass-card p-3 hover:border-brand/30 dark:hover:border-brand/30 hover:shadow-xl dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-200 ease-out transform group-hover:-translate-y-1 h-full flex flex-col">
                                 
                                 {{-- Thumbnail Area --}}
                                 <div class="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden mb-4 bg-gray-100 dark:bg-dark-bg shrink-0">
@@ -223,7 +223,7 @@
                 </div>
             @endif
         @else
-            <div class="text-center py-20 bg-white dark:bg-dark-surface rounded-2xl border border-gray-200 dark:border-dark-border">
+            <div class="text-center py-20 glass-panel">
                 <div class="mx-auto w-16 h-16 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-5">
                     <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                 </div>

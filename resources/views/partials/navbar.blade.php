@@ -1,4 +1,4 @@
-<header class="h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border z-30 sticky top-0 w-full transition-colors gap-3">
+<header class="h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 m-4 lg:m-6 rounded-2xl glass-nav z-30 sticky top-4 lg:top-6 transition-colors gap-3">
 
     {{-- Left: Hamburger (mobile) + Search --}}
     <div class="flex items-center gap-3 flex-1 min-w-0">
@@ -57,7 +57,7 @@
                      x-transition:leave="transition ease-in duration-100"
                      x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
                      x-transition:leave-end="transform opacity-0 scale-95 translate-y-1"
-                     class="absolute right-0 mt-2 w-52 bg-white dark:bg-dark-surface rounded-xl shadow-lg shadow-black/10 dark:shadow-black/40 py-1.5 border border-gray-100 dark:border-white/10 z-50 overflow-hidden" style="display: none;">
+                     class="absolute right-0 mt-2 w-52 glass-panel !rounded-xl shadow-lg shadow-black/10 dark:shadow-black/40 py-1.5 z-50 overflow-hidden" style="display: none;">
                     
                     <div class="px-4 py-2.5 border-b border-gray-100 dark:border-white/5">
                         <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ auth()->user()->name }}</p>

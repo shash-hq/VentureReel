@@ -13,7 +13,7 @@
         </div>
 
         @if($videos->count() > 0)
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-2xl overflow-hidden shadow-sm">
+            <div class="glass-panel p-0 overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5">
                         <thead class="bg-gray-50 dark:bg-[#1a1a1a]">
@@ -27,7 +27,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-white/5 bg-white dark:bg-dark-surface">
+                        <tbody class="divide-y divide-gray-200 dark:divide-white/5 bg-white/20 dark:bg-dark-surface/50">
                             @foreach($videos as $video)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
@@ -95,7 +95,7 @@
                 {{ $videos->links() }}
             </div>
         @else
-            <div class="text-center py-24 bg-white dark:bg-dark-surface rounded-[32px] border border-gray-200 dark:border-dark-border">
+            <div class="text-center py-24 glass-panel !rounded-[32px]">
                 <div class="mx-auto w-20 h-20 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-6">
                     <svg class="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
                 </div>
@@ -125,7 +125,7 @@
                 </div>
             @endif
         @else
-            <div class="text-center py-12 bg-gray-50 dark:bg-dark-surface rounded-2xl border border-gray-100 dark:border-dark-border">
+            <div class="text-center py-12 glass-panel flex flex-col items-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                 <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No bookmarks</h3>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Save videos to watch them later here.</p>
@@ -140,7 +140,7 @@
         @if($collections->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 @foreach($collections as $collection)
-                    <a href="{{ route('collections.show', $collection) }}" class="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-gray-100 dark:bg-dark-surface border border-gray-200 dark:border-white/5">
+                    <a href="{{ route('collections.show', $collection) }}" class="group block relative glass-card aspect-[4/3] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out">
                         @if($collection->cover_image)
                             <img src="{{ $collection->cover_image }}" alt="{{ $collection->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         @else
@@ -163,7 +163,7 @@
                 </div>
             @endif
         @else
-            <div class="text-center py-12 bg-gray-50 dark:bg-dark-surface rounded-2xl border border-gray-100 dark:border-dark-border">
+            <div class="text-center py-12 glass-panel flex flex-col items-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No followed collections</h3>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Follow curated collections to see them here.</p>

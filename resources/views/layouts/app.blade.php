@@ -18,7 +18,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased text-gray-900 bg-white dark:bg-dark-bg dark:text-gray-100 flex h-screen overflow-hidden">
+    <body class="font-sans antialiased text-gray-900 bg-base-cream dark:bg-deep-charcoal dark:text-gray-100 flex h-screen overflow-hidden">
 
         {{-- Mobile Sidebar Overlay --}}
         <div x-show="sidebarOpen"
@@ -36,7 +36,7 @@
         @include('partials.sidebar')
 
         {{-- Main Content Wrapper --}}
-        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-white dark:bg-dark-bg">
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-base-cream dark:bg-deep-charcoal">
             {{-- Top Navbar --}}
             @include('partials.navbar')
 

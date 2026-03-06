@@ -22,9 +22,23 @@
 
 /* Custom focus styles */
 :focus-visible {
-    outline: 2px solid #F43F5E;
+    outline: 2px solid #F59E0B;
     outline-offset: 2px;
     border-radius: 8px;
+}
+
+@layer components {
+    .glass-panel {
+        @apply bg-white/60 dark:bg-white/5 backdrop-blur-md border border-white/30 dark:border-white/10 shadow-sm rounded-2xl;
+    }
+
+    .glass-card {
+        @apply bg-white/70 dark:bg-white/5 backdrop-blur-sm border border-white/40 dark:border-white/10 shadow-sm rounded-2xl transition hover:shadow-md hover:-translate-y-0.5;
+    }
+
+    .glass-nav {
+        @apply bg-white/70 dark:bg-[#1C1A16]/80 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-sm rounded-2xl;
+    }
 }
 
 /* Line clamp utility */

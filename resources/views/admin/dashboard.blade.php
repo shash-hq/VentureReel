@@ -11,22 +11,22 @@
         {{-- Top Level Metrics --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <!-- Total Videos -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <div class="glass-panel p-5 transition-transform hover:-translate-y-1">
                 <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Videos</span>
                 <div class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($stats['total_videos']) }}</div>
             </div>
             <!-- Total Users -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <div class="glass-panel p-5 transition-transform hover:-translate-y-1">
                 <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Users</span>
                 <div class="mt-2 text-3xl font-bold text-brand">{{ number_format($stats['total_users']) }}</div>
             </div>
             <!-- Pending Videos -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <div class="glass-panel p-5 transition-transform hover:-translate-y-1">
                 <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Pending Approval</span>
                 <div class="mt-2 text-3xl font-bold text-yellow-600 dark:text-yellow-500">{{ number_format($stats['pending_videos']) }}</div>
             </div>
             <!-- DAU Chart -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <div class="glass-panel p-5 transition-transform hover:-translate-y-1">
                 <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">DAU (7 Days)</span>
                 <div class="mt-3 flex items-end justify-between h-8 gap-1.5">
                     @php $maxDAU = max(1, max(array_values($dauChart))); @endphp
@@ -45,11 +45,11 @@
         {{-- Detailed Data Grids --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <!-- Most Searched Keywords -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="glass-panel p-0 overflow-hidden flex flex-col">
                 <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Top Searches</h3>
                 </div>
-                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 bg-white/20 dark:bg-dark-surface/50 flex-grow">
                     @forelse($mostSearched as $search)
                         <li class="px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-4">{{ $search->query }}</span>
@@ -62,11 +62,11 @@
             </div>
 
             <!-- Most Viewed Videos -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="glass-panel p-0 overflow-hidden flex flex-col">
                 <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Most Viewed</h3>
                 </div>
-                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 bg-white/20 dark:bg-dark-surface/50 flex-grow">
                     @forelse($mostViewedVideos as $video)
                         <li class="px-5 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <a href="{{ route('videos.show', $video) }}" class="flex flex-col gap-1 group" target="_blank">
@@ -81,11 +81,11 @@
             </div>
 
             <!-- Newest Imports -->
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="glass-panel p-0 overflow-hidden flex flex-col">
                 <div class="px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-[#1a1a1a]">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Recent YouTube Imports</h3>
                 </div>
-                <ul class="divide-y divide-gray-200 dark:divide-white/5 flex-grow">
+                <ul class="divide-y divide-gray-200 dark:divide-white/5 bg-white/20 dark:bg-dark-surface/50 flex-grow">
                     @forelse($newestImports as $video)
                         <li class="px-5 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <a href="{{ route('videos.show', $video) }}" class="flex flex-col gap-1 group" target="_blank">
@@ -105,7 +105,7 @@
         </div>
 
         @if($pendingVideos->count() > 0)
-            <div class="bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-2xl overflow-hidden shadow-sm">
+            <div class="glass-panel p-0 overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5">
                         <thead class="bg-gray-50 dark:bg-[#1a1a1a]">
@@ -118,7 +118,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-white/5 bg-white dark:bg-dark-surface">
+                        <tbody class="divide-y divide-gray-200 dark:divide-white/5 bg-white/20 dark:bg-dark-surface/50">
                             @foreach($pendingVideos as $video)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
@@ -176,7 +176,7 @@
                 {{ $pendingVideos->links() }}
             </div>
         @else
-            <div class="text-center py-24 bg-white dark:bg-dark-surface rounded-[32px] border border-gray-200 dark:border-dark-border">
+            <div class="text-center py-24 glass-panel !rounded-[32px]">
                 <div class="mx-auto w-20 h-20 bg-green-50 dark:bg-green-900/10 rounded-full flex items-center justify-center mb-6">
                     <svg class="w-10 h-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path></svg>
                 </div>

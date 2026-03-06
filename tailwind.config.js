@@ -17,16 +17,22 @@ export default {
             },
             colors: {
                 brand: {
-                    DEFAULT: '#F43F5E', // Rose 500
-                    hover: '#E11D48', // Rose 600
+                    DEFAULT: '#F59E0B', // Amber 500
+                    hover: '#D97706', // Amber 600
                 },
                 accent: {
                     DEFAULT: '#10B981', // Emerald 500 for category tags
                 },
+                base: {
+                    cream: '#F5F0E8', // Warm off-white base color
+                },
+                deep: {
+                    charcoal: '#1C1A16', // Deep warm charcoal for dark mode
+                },
                 dark: {
-                    bg: '#000000', // Very dark for main background
-                    surface: '#111111', // Slightly lighter for cards/sidebar
-                    border: '#222222',
+                    bg: '#1C1A16', // Legacy mapping to charcoal
+                    surface: '#26231E', // Slightly lighter for cards/sidebar
+                    border: '#332F28',
                 }
             }
         },

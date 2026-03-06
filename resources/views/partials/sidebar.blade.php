@@ -1,4 +1,4 @@
-<aside class="w-64 flex-shrink-0 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-dark-border flex flex-col h-full overflow-y-auto no-scrollbar
+<aside class="w-64 flex-shrink-0 glass-panel m-4 lg:my-6 lg:ml-6 flex flex-col h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)] overflow-y-auto no-scrollbar
              fixed inset-y-0 left-0 z-50 md:relative md:z-auto
              transform transition-transform duration-300 ease-in-out
              md:translate-x-0"

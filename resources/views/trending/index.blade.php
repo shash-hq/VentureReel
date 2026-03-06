@@ -26,7 +26,7 @@
                     @endforeach
                 </div>
             @else
-                <div class="text-center py-16 bg-white dark:bg-dark-surface rounded-2xl border border-gray-200 dark:border-dark-border">
+                <div class="text-center py-16 glass-panel flex flex-col items-center">
                     <p class="text-gray-500 dark:text-gray-400">No trending videos yet. Be the first to submit!</p>
                     <a href="{{ route('videos.create') }}" class="inline-flex items-center mt-4 px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-brand hover:bg-brand-hover transition-colors">Submit a Video</a>
                 </div>
@@ -44,7 +44,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 @foreach($youtubeTrending as $yt)
-                <a href="{{ $yt['youtube_url'] }}" target="_blank" rel="noopener" class="bg-white dark:bg-dark-surface rounded-2xl overflow-hidden border border-gray-200 dark:border-dark-border hover:shadow-lg dark:hover:shadow-black/40 hover:ring-1 hover:ring-brand/20 transition-all group flex flex-col">
+                <a href="{{ $yt['youtube_url'] }}" target="_blank" rel="noopener" class="glass-card overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out group flex flex-col h-full">
                     {{-- Thumbnail --}}
                     <div class="relative aspect-video overflow-hidden">
                         <img src="{{ $yt['thumbnail_url'] }}" alt="{{ $yt['title'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/640x360/111/333?text=Video'">
