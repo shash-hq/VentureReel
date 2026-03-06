@@ -29,15 +29,15 @@
 
 @layer components {
     .glass-panel {
-        @apply bg-white/60 dark:bg-white/5 backdrop-blur-md border border-white/30 dark:border-white/10 shadow-sm rounded-2xl;
+        @apply bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-sm rounded-2xl;
     }
 
     .glass-card {
-        @apply bg-white/70 dark:bg-white/5 backdrop-blur-sm border border-white/40 dark:border-white/10 shadow-sm rounded-2xl transition hover:shadow-md hover:-translate-y-0.5;
+        @apply bg-white/60 dark:bg-white/5 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-[0_8px_30px_#0000001E] dark:hover:shadow-[0_8px_30px_#00000080] hover:-translate-y-1;
     }
 
     .glass-nav {
-        @apply bg-white/70 dark:bg-[#1C1A16]/80 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-sm rounded-2xl;
+        @apply bg-white/60 dark:bg-[#1C1A16]/80 backdrop-blur-xl border-b border-white/30 dark:border-white/10 shadow-[0_4px_30px_#0000000D] rounded-2xl;
     }
 }
 

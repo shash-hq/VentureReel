@@ -1,4 +1,4 @@
-<header class="h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 m-4 lg:m-6 rounded-2xl glass-nav z-30 sticky top-4 lg:top-6 transition-colors gap-3">
+<header class="h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 m-4 lg:mx-6 lg:mt-6 rounded-2xl bg-white/60 dark:bg-[#1C1A16]/80 backdrop-blur-xl border-b border-white/30 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.05)] z-30 sticky top-4 lg:top-6 transition-colors gap-3">
 
     {{-- Left: Hamburger (mobile) + Search --}}
     <div class="flex items-center gap-3 flex-1 min-w-0">

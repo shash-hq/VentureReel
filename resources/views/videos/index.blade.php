@@ -27,7 +27,7 @@
                                 <div class="flex items-center gap-3 text-gray-300 text-[13px] font-medium">
                                     <div class="flex items-center gap-2">
                                         <img src="{{ $featuredVideo->user->avatar_url }}" alt="" class="w-6 h-6 rounded-full border border-white/20 object-cover" loading="lazy">
-                                        <span class="text-white">{{ $featuredVideo->user->name }}</span>
+                                        <span class="text-white">{{ $featuredVideo->channel_name ?? $featuredVideo->user->name }}</span>
                                     </div>
                                     <span class="w-1 h-1 rounded-full bg-gray-500 hidden sm:block"></span>
                                     <span class="hidden sm:block">{{ number_format($featuredVideo->views_count) }} views</span>
@@ -78,12 +78,12 @@
                                             @endphp
                                             <form action="{{ route('collections.follow', $collection) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="w-full text-center px-4 py-2.5 text-sm font-semibold rounded-xl transition-all {{ $isFollowing ? 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20' : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 shadow-sm hover:shadow' }}">
+                                                <button type="submit" class="w-full text-center px-4 py-2.5 text-sm font-semibold rounded-xl transition-all {{ $isFollowing ? 'bg-brand text-white border border-brand hover:bg-brand-hover shadow-sm' : 'bg-transparent border border-brand text-brand hover:bg-brand hover:text-white shadow-sm' }}">
                                                     {{ $isFollowing ? 'Following' : 'Follow' }}
                                                 </button>
                                             </form>
                                         @else
-                                            <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2.5 text-sm font-semibold rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-sm hover:shadow">
+                                            <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2.5 text-sm font-semibold rounded-xl bg-transparent border border-brand text-brand hover:bg-brand hover:text-white transition-all shadow-sm">
                                                 Follow
                                             </a>
                                         @endauth

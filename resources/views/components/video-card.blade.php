@@ -1,6 +1,6 @@
 @props(['video'])
 
-<div class="glass-card overflow-hidden hover:shadow-xl dark:hover:shadow-black/40 hover:ring-1 hover:ring-brand/15 hover:-translate-y-1 transition-all duration-200 ease-out group flex flex-col h-full">
+<div class="glass-card overflow-hidden transition-all duration-200 ease-out group flex flex-col h-full">
     {{-- Thumbnail --}}
     <a href="{{ route('videos.show', $video) }}" class="block relative aspect-video overflow-hidden">
         <img src="{{ $video->thumbnail_url }}"

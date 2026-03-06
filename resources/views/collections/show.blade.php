@@ -28,12 +28,12 @@
                     @endphp
                     <form action="{{ route('collections.follow', $collection) }}" method="POST">
                         @csrf
-                        <button type="submit" class="px-6 py-2.5 font-semibold rounded-full transition-colors shadow-sm {{ $isFollowing ? 'bg-gray-200 dark:bg-dark-surface text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-white/10 hover:bg-gray-300 dark:hover:bg-white/5' : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100' }}">
+                        <button type="submit" class="px-6 py-2.5 font-semibold rounded-full transition-colors shadow-sm {{ $isFollowing ? 'bg-brand text-white border border-brand hover:bg-brand-hover' : 'bg-transparent border border-brand text-brand hover:bg-brand hover:text-white' }}">
                             {{ $isFollowing ? 'Following' : 'Follow Collection' }}
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="inline-block px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold rounded-full hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-sm">
+                    <a href="{{ route('login') }}" class="inline-block px-6 py-2.5 bg-transparent border border-brand text-brand hover:bg-brand hover:text-white font-semibold rounded-full transition-colors shadow-sm">
                         Login to Follow
                     </a>
                 @endauth
