@@ -18,6 +18,11 @@
                    placeholder="Search founders, startups..."
                    @focus="focused = true" @blur="focused = false"
                    class="block w-full pl-10 pr-3 py-2 border border-transparent rounded-xl leading-5 bg-gray-100 dark:bg-[#1a1a1a] text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-gray-200/70 dark:hover:bg-[#222] focus:bg-white dark:focus:bg-dark-bg focus:border-gray-300 dark:focus:border-gray-600 focus:outline-none focus:ring-0 text-sm transition-all">
+            @error('search')
+                <div class="absolute top-full left-0 mt-2 px-3 py-1.5 bg-brand/10 text-brand text-xs font-medium rounded-lg border border-brand/20 whitespace-nowrap shadow-sm backdrop-blur-md z-50">
+                    {{ $message }}
+                </div>
+            @enderror
         </form>
     </div>
 

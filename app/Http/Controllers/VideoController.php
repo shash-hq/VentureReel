@@ -15,9 +15,13 @@ class VideoController extends Controller
     /**
      * Display listing of approved videos (homepage).
      */
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         $search = request('search');
+        
+        if (request()->has('search') && empty(trim($search))) {
+            return redirect()->back()->withErrors(['search' => 'Please enter a search term to find videos.']);
+        }
         $categorySlug = request('category');
 
         if ($search && auth()->check()) {

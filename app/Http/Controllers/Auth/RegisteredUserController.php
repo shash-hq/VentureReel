@@ -33,9 +33,15 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['nullable', 'string', 'max:30', 'alpha_dash', 'unique:users'],
             'email' => ['required', 'string', 'lowercase', 'email:rfc,strict', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Rules\Password::min(8)],
         ], [
-            'email.email' => 'Please provide a valid email address.',
+            'name.required' => 'Please enter your full name.',
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please provide a valid email address format (e.g. john@example.com).',
+            'email.unique' => 'This email is already registered.',
+            'password.required' => 'Please choose a password.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'password.min' => 'Your password must be at least 8 characters long.',
         ]);
 
         $username = $request->username ?: \Illuminate\Support\Str::slug($request->name) . rand(10, 99);

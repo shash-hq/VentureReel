@@ -18,7 +18,7 @@
                     <div>
                         <label for="youtube_url" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">YouTube URL</label>
                         <input type="url" name="youtube_url" id="youtube_url" value="{{ old('youtube_url') }}" required placeholder="https://www.youtube.com/watch?v=..." class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm">
-                        @error('youtube_url') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                        @error('youtube_url') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -26,21 +26,21 @@
                         <div class="md:col-span-2">
                             <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Video Title</label>
                             <input type="text" name="title" id="title" value="{{ old('title') }}" required placeholder="E.g. How we scaled to $10k MRR" class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm">
-                            @error('title') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('title') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Entrepreneur Name -->
                         <div>
                             <label for="entrepreneur_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Founder/Entrepreneur Name</label>
                             <input type="text" name="entrepreneur_name" id="entrepreneur_name" value="{{ old('entrepreneur_name') }}" required class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm">
-                            @error('entrepreneur_name') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('entrepreneur_name') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Business Name -->
                         <div>
                             <label for="business_name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Business/Startup Name</label>
                             <input type="text" name="business_name" id="business_name" value="{{ old('business_name') }}" required class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm">
-                            @error('business_name') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('business_name') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                     <div>
                         <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Story Description</label>
                         <textarea name="description" id="description" rows="4" required class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm resize-none" placeholder="What makes this story compelling?">{{ old('description') }}</textarea>
-                        @error('description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                        @error('description') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -63,14 +63,14 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('category_id') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('category_id') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Tags -->
                         <div>
                             <label for="tags" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tags <span class="font-normal text-gray-400 dark:text-gray-500">(comma separated)</span></label>
                             <input type="text" name="tags" id="tags" value="{{ old('tags') }}" placeholder="saas, bootstrap, marketing" class="block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-dark-bg focus:border-brand focus:ring-brand shadow-sm sm:text-sm">
-                            @error('tags') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                            @error('tags') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div id="file-name-display" class="mt-2 text-sm text-gray-500 hidden text-center font-medium"></div>
-                        @error('thumbnail') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                        @error('thumbnail') <p class="mt-2 text-sm text-brand dark:text-amber-500">{{ $message }}</p> @enderror
                         
                         <script>
                             document.getElementById('thumbnail').addEventListener('change', function(e) {
