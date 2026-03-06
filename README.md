@@ -18,7 +18,7 @@ VentureReel is a modern server-rendered application built for speed, SEO, and ro
 * **YouTube Hybrid Search with One-Click Import:** Search for any founder or company. Our engine checks the local database first and gracefully falls back to a live YouTube API search. Import any public video directly into the platform with full metadata ingestion in a single click.
 * **Founder Collections:** Curate groups of related videos (e.g., "Y Combinator 2024", "Fintech Disruptors") with an integrated follow/subscription system.
 * **Personalized Recommendations:** We track authenticated user search histories and dynamically render a tailored "Based on your searches" feed.
-* **Email Verification via Resend:** Secure user accounts via strict RFC email validation and automated OTP/Verification emails dispatched globally using the Resend API.
+* **Email Verification via Resend:** Secure user accounts via strict RFC email validation and automated verification emails dispatched via the Resend API.
 * **Glassmorphism UI & Dark Mode:** A stunning, CSS-native frosted glass aesthetic mapped perfectly across both light and dark native OS modes natively integrated using Tailwind.
 * **Admin Analytics Dashboard:** A protected administrative command center highlighting Daily Active Users (DAU), top trending videos, platform aggregates, and collection management via intuitive internal REST controllers.
 
@@ -29,7 +29,7 @@ VentureReel operates on a clean, scalable Model-View-Controller (MVC) architectu
 * **Routing & Middleware:** Web and Auth routes dictate access, firmly protected by rate limiters (Throttle), Content Security Policies, and Auth/Admin verification middleware.
 * **Controllers:** Lean, single-responsibility PHP classes that orchestrate data gathering and parameter sanitation.
 * **Services:** Heavy external logic (e.g., executing YouTube API fetches or image caching logic) is abstracted directly into dedicated service classes like `YouTubeService.php`.
-* **Models:** Eloquent ORM bindings defining relationships between Users, Videos, Comments, and pivoting polymorphic Collections.
+* **Models:** Eloquent ORM bindings defining relationships between Users, Videos, and pivoting polymorphic Collections.
 * **Views:** Server-rendered HTML utilizing Blade templating tightly coupled with scoped AlpineJS states for rapid browser interactions without heavy client-side Javascript frameworks.
 
 ## Local Setup
@@ -75,7 +75,7 @@ Navigate to `http://localhost:8000` or `http://127.0.0.1:8000` to view the appli
 ## Screenshots
 <br>
 
-**(Application UI Screenshots — Space reserved for post-deployment production captures)*.*
+**(Application UI Screenshots — Space reserved for post-deployment production captures)**
 
 <br>
 
