@@ -1,18 +1,2 @@
-# nixpacks.toml
-# Explicitly define PHP and Node versions for Laravel to avoid runtime mismatches
 [phases.setup]
-nixPkgs = ["php83", "php83Extensions.pdo_mysql", "php83Extensions.curl", "nodejs_20", "composer"]
-
-[phases.install]
-cmds = [
-    "npm ci",
-    "composer install --no-interaction --no-dev --optimize-autoloader"
-]
-
-[phases.build]
-cmds = [
-    "npm run build",
-    "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan view:cache"
-]
+nixPkgs = ['php83', 'php83Extensions.pdo_mysql', 'php83Extensions.curl', 'nodejs_20', 'phpPackages.composer']
