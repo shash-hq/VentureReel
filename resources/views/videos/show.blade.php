@@ -100,7 +100,7 @@
                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">Submitted by</h3>
                     @if($video->user)
                     <a href="{{ route('user.profile', $video->user) }}" class="flex items-center gap-4 group">
-                        <img src="{{ $video->user->avatar_url }}" alt="{{ $video->user->name }}" class="w-14 h-14 rounded-full object-cover border border-gray-200 dark:border-gray-700 group-hover:border-brand transition-colors">
+                        <img src="{{ $video->user->avatar_url }}" alt="{{ $video->user->name }}" class="w-14 h-14 rounded-full object-cover border border-gray-200 dark:border-gray-700 group-hover:border-brand transition-colors" loading="lazy">
                         <div>
                             <p class="font-bold text-gray-900 dark:text-white group-hover:text-brand transition-colors">{{ $video->user->name }}</p>
                             <p class="text-sm text-gray-500">{{ '@' . $video->user->username }}</p>
@@ -130,7 +130,7 @@
                         @foreach($relatedVideos as $related)
                         <a href="{{ route('videos.show', $related) }}" class="flex gap-3 group">
                             <div class="w-32 aspect-video flex-shrink-0 rounded-lg overflow-hidden border border-gray-100 dark:border-white/5 relative">
-                                <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                                <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy">
                                 <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
                             </div>
                             <div class="flex flex-col justify-center">

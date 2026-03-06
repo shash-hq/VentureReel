@@ -7,7 +7,7 @@
             <div class="absolute top-0 right-0 w-64 h-64 bg-brand/5 dark:bg-brand/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             
             <div class="relative z-10 flex-shrink-0">
-                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-dark-bg object-cover shadow-lg">
+                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-dark-bg object-cover shadow-lg" loading="lazy">
             </div>
             
             <div class="relative z-10 flex-1 text-center md:text-left flex flex-col justify-center h-full pt-2">

@@ -12,8 +12,14 @@ class UserProfileController extends Controller
     /**
      * Display a user's public profile.
      */
-    public function show(User $user): View
+    public function show($identifier): View
     {
+        try {
+            $user = User::where('id', $identifier)->orWhere('username', $identifier)->firstOrFail();
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $videos = $user->videos()
             ->approved()
             ->with('category')

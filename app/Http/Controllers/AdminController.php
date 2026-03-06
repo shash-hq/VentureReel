@@ -38,6 +38,8 @@ class AdminController extends Controller
             'pending_videos' => Video::pending()->count(),
             'total_users' => \App\Models\User::count(),
         ];
+        
+        $maxDAU = max(1, max(empty($dauChart) ? [0] : array_values($dauChart)));
 
         $mostSearched = \App\Models\SearchHistory::select('query', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
             ->groupBy('query')
@@ -48,7 +50,7 @@ class AdminController extends Controller
         $mostViewedVideos = Video::orderByDesc('views_count')->limit(5)->get();
         $newestImports = Video::whereNotNull('youtube_video_id')->latest()->limit(5)->get();
 
-        return view('admin.dashboard', compact('pendingVideos', 'stats', 'dauChart', 'mostSearched', 'mostViewedVideos', 'newestImports'));
+        return view('admin.dashboard', compact('pendingVideos', 'stats', 'dauChart', 'maxDAU', 'mostSearched', 'mostViewedVideos', 'newestImports'));
     }
 
     /**

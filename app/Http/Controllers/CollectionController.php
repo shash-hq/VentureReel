@@ -7,9 +7,19 @@ use Illuminate\Http\Request;
 
 class CollectionController extends Controller
 {
-    public function show(Collection $collection)
+    public function show($identifier)
     {
-        $videos = $collection->videos()->with(['category'])->latest()->paginate(16);
+        try {
+            $collection = Collection::where('slug', $identifier)->orWhere('id', $identifier)->firstOrFail();
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $videos = $collection->videos()
+            ->with(['category', 'user'])
+            ->withCount('likes')
+            ->latest()
+            ->paginate(16);
         return view('collections.show', compact('collection', 'videos'));
     }
 }

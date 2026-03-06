@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\Route;
 // Homepage — video listing
 Route::get('/', [VideoController::class, 'index'])->name('home');
 
-// Public video & category browsing
-Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
+// Public video & category browsing (search route has rate limiting of 30 requests per minute)
+Route::get('/videos', [VideoController::class, 'index'])->middleware('throttle:30,1')->name('videos.index');
 Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
 Route::get('/videos/import/{youtube_id}', [VideoController::class, 'importYouTube'])->name('videos.import');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');

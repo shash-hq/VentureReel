@@ -20,8 +20,14 @@ class CategoryController extends Controller
     /**
      * Display videos in a specific category.
      */
-    public function show(Category $category): View
+    public function show($identifier): View
     {
+        try {
+            $category = Category::where('slug', $identifier)->orWhere('id', $identifier)->firstOrFail();
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $videos = $category->approvedVideos()
             ->with('user')
             ->withCount('likes')

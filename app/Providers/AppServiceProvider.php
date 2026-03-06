@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Illuminate\Support\Facades\View::composer('partials.sidebar', function ($view) {
+            $view->with('allCategories', \App\Models\Category::all());
+        });
     }
 }

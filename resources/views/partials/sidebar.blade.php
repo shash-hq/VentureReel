@@ -21,7 +21,7 @@
     @auth
     {{-- User Profile Snippet --}}
     <a href="{{ route('user.profile', auth()->user()) }}" @click="sidebarOpen = false" class="mx-3 px-3 py-3 flex items-center gap-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
-        <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="h-9 w-9 rounded-full object-cover border border-brand/20 group-hover:border-brand transition-colors">
+        <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="h-9 w-9 rounded-full object-cover border border-brand/20 group-hover:border-brand transition-colors" loading="lazy">
         <div class="flex flex-col overflow-hidden">
             <span class="text-sm font-semibold text-gray-900 dark:text-white leading-tight truncate">{{ auth()->user()->name }}</span>
             <span class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ '@' . auth()->user()->username }}</span>
@@ -55,7 +55,6 @@
     <div class="px-5 mt-6 mb-4 border-t border-gray-100 dark:border-white/5 pt-5">
         <h3 class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 tracking-wider uppercase mb-3">Categories</h3>
         <ul class="space-y-0.5">
-            @php $allCategories = \App\Models\Category::all(); @endphp
             @foreach($allCategories as $category)
             <li>
                 <a href="{{ route('categories.show', $category) }}" @click="sidebarOpen = false" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] {{ request()->is('categories/'.$category->slug) ? 'text-gray-900 dark:text-white font-semibold bg-gray-50 dark:bg-white/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5' }} transition-all">

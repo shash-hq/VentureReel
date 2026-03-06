@@ -29,7 +29,7 @@
             <div class="glass-panel p-5 transition-transform hover:-translate-y-1">
                 <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">DAU (7 Days)</span>
                 <div class="mt-3 flex items-end justify-between h-8 gap-1.5">
-                    @php $maxDAU = max(1, max(array_values($dauChart))); @endphp
+
                     @foreach($dauChart as $date => $count)
                         <div class="w-full bg-brand/20 rounded-t relative group h-full flex items-end">
                             <div class="w-full bg-brand rounded-t transition-all duration-500" style="height: {{ ($count / $maxDAU) * 100 }}%"></div>
@@ -124,7 +124,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-4">
                                             <div class="flex-shrink-0 h-16 w-28 rounded-lg overflow-hidden bg-gray-100 dark:bg-dark-bg border border-gray-200 dark:border-white/5">
-                                                <img class="h-full w-full object-cover" src="{{ $video->thumbnail_url }}" alt="">
+                                                <img class="h-full w-full object-cover" src="{{ $video->thumbnail_url }}" alt="" loading="lazy">
                                             </div>
                                             <div>
                                                 <div class="font-semibold text-gray-900 dark:text-white line-clamp-1 max-w-md">{{ $video->title }}</div>

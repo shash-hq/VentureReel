@@ -38,7 +38,7 @@
 
             {{-- Logo --}}
             <div class="mb-8">
-                <a href="/" class="flex flex-col items-center gap-4 group">
+                <a href="{{ route('home') }}" class="flex flex-col items-center gap-4 group">
                     <div class="w-16 h-16 rounded-2xl bg-brand/10 dark:bg-brand/20 flex items-center justify-center group-hover:bg-brand/20 dark:group-hover:bg-brand/30 transition-colors shadow-lg shadow-brand/5 border border-brand/20">
                         <svg class="h-8 w-8 text-brand" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>

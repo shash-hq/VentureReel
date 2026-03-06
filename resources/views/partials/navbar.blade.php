@@ -1,4 +1,4 @@
-<header class="h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 m-4 lg:mx-6 lg:mt-6 rounded-2xl bg-white/60 dark:bg-[#1C1A16]/80 backdrop-blur-xl border-b border-white/30 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.05)] z-30 sticky top-4 lg:top-6 transition-colors gap-3">
+<header x-data="{ mobileSearchOpen: false }" class="relative h-16 flex-shrink-0 flex items-center justify-between px-4 sm:px-6 m-4 lg:mx-6 lg:mt-6 rounded-2xl bg-white/60 dark:bg-[#1C1A16]/80 backdrop-blur-xl border-b border-white/30 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.05)] z-30 sticky top-4 lg:top-6 transition-colors gap-3">
 
     {{-- Left: Hamburger (mobile) + Search --}}
     <div class="flex items-center gap-3 flex-1 min-w-0">
@@ -8,7 +8,7 @@
         </button>
 
         {{-- Search Bar --}}
-        <form action="{{ route('videos.index') }}" method="GET" class="flex-1 max-w-xl relative group" x-data="{ focused: false }">
+        <form action="{{ route('videos.index') }}" method="GET" class="hidden sm:block flex-1 max-w-xl relative group" x-data="{ focused: false }">
             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -28,6 +28,10 @@
 
     {{-- Right: Actions --}}
     <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+        {{-- Mobile Search Toggle --}}
+        <button @click="mobileSearchOpen = !mobileSearchOpen" class="sm:hidden p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 transition-all focus:outline-none" aria-label="Toggle mobile search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </button>
         {{-- Theme Toggler --}}
         <button @click="darkMode = !darkMode" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 transition-all focus:outline-none" aria-label="Toggle theme">
             <svg x-show="darkMode" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -52,7 +56,7 @@
             {{-- User Dropdown --}}
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open" @click.away="open = false" class="flex items-center focus:outline-none rounded-full ring-2 ring-transparent hover:ring-brand/20 transition-all">
-                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-700" loading="lazy">
                 </button>
                 
                 <div x-show="open" 
@@ -96,5 +100,26 @@
                 <span class="sm:hidden">Join</span>
             </a>
         @endauth
+    </div>
+
+    {{-- Mobile Search Dropdown --}}
+    <div x-show="mobileSearchOpen" 
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-2"
+         class="absolute top-full left-0 right-0 mt-2 p-3 bg-white/90 dark:bg-[#1C1A16]/90 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg sm:hidden z-50 transform origin-top" style="display: none;">
+        <form action="{{ route('videos.index') }}" method="GET" class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <input type="text" name="search" value="{{ request('search') }}"
+                   placeholder="Search..."
+                   class="block w-full pl-10 pr-3 py-2.5 border border-transparent rounded-xl leading-5 bg-gray-100 dark:bg-[#1a1a1a] text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:bg-white dark:focus:bg-dark-bg focus:border-gray-300 dark:focus:border-gray-600 focus:outline-none focus:ring-2 focus:ring-brand/20 text-sm transition-all">
+        </form>
     </div>
 </header>

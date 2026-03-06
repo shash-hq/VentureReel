@@ -33,7 +33,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-4">
                                             <div class="flex-shrink-0 h-16 w-28 rounded-lg overflow-hidden bg-gray-100 dark:bg-dark-bg border border-gray-200 dark:border-white/5">
-                                                <img class="h-full w-full object-cover" src="{{ $video->thumbnail_url }}" alt="">
+                                                <img class="h-full w-full object-cover" src="{{ $video->thumbnail_url }}" alt="" loading="lazy">
                                             </div>
                                             <div>
                                                 <div class="font-semibold text-gray-900 dark:text-white line-clamp-1 max-w-sm">{{ $video->title }}</div>
@@ -95,13 +95,13 @@
                 {{ $videos->links() }}
             </div>
         @else
-            <div class="text-center py-24 glass-panel !rounded-[32px]">
-                <div class="mx-auto w-20 h-20 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
+            <div class="text-center py-20 glass-panel flex flex-col items-center justify-center !rounded-[32px]">
+                <div class="w-20 h-20 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 border border-gray-100 dark:border-white/10 shadow-sm">
+                    <svg class="w-10 h-10 text-brand opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">You haven't uploaded any videos</h3>
                 <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8">Share your entrepreneurial journey or pitch with the VentureReel community.</p>
-                <a href="{{ route('videos.create') }}" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-sm font-semibold rounded-full text-white bg-brand hover:bg-brand-hover focus:outline-none transition-colors">
+                <a href="{{ route('videos.create') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent bg-brand text-white hover:bg-brand-hover rounded-xl font-medium transition-all shadow-sm">
                     Upload Your First Video
                 </a>
             </div>
@@ -125,10 +125,15 @@
                 </div>
             @endif
         @else
-            <div class="text-center py-12 glass-panel flex flex-col items-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No bookmarks</h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Save videos to watch them later here.</p>
+            <div class="text-center py-16 glass-panel flex flex-col items-center justify-center">
+                <div class="w-16 h-16 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 border border-gray-100 dark:border-white/10 shadow-sm">
+                    <svg class="w-8 h-8 text-brand opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">No bookmarks</h3>
+                <p class="text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-6">Save videos to watch them later here.</p>
+                <a href="{{ route('home') }}" class="inline-flex items-center justify-center px-5 py-2.5 border border-brand text-brand hover:bg-brand hover:text-white rounded-xl text-sm font-medium transition-all shadow-sm">
+                    Discover Videos
+                </a>
             </div>
         @endif
 
@@ -142,7 +147,7 @@
                 @foreach($collections as $collection)
                     <a href="{{ route('collections.show', $collection) }}" class="group block relative glass-card aspect-[4/3] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out">
                         @if($collection->cover_image)
-                            <img src="{{ $collection->cover_image }}" alt="{{ $collection->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <img src="{{ $collection->cover_image }}" alt="{{ $collection->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-dark-bg text-gray-400 group-hover:bg-gray-300 transition-colors">
                                 <svg class="h-10 w-10 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -163,10 +168,15 @@
                 </div>
             @endif
         @else
-            <div class="text-center py-12 glass-panel flex flex-col items-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No followed collections</h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Follow curated collections to see them here.</p>
+            <div class="text-center py-16 glass-panel flex flex-col items-center justify-center mb-8">
+                <div class="w-16 h-16 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 border border-gray-100 dark:border-white/10 shadow-sm">
+                    <svg class="w-8 h-8 text-brand opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">No followed collections</h3>
+                <p class="text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-6">Follow curated founder collections to see them here.</p>
+                <a href="{{ route('home') }}" class="inline-flex items-center justify-center px-5 py-2.5 border border-brand text-brand hover:bg-brand hover:text-white rounded-xl text-sm font-medium transition-all shadow-sm">
+                    Browse Collections
+                </a>
             </div>
         @endif
 

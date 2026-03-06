@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\TrackDailyActiveUser::class,
+            \App\Http\Middleware\ContentSecurityPolicy::class,
         ]);
 
         $middleware->alias([

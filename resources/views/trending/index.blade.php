@@ -26,9 +26,15 @@
                     @endforeach
                 </div>
             @else
-                <div class="text-center py-16 glass-panel flex flex-col items-center">
-                    <p class="text-gray-500 dark:text-gray-400">No trending videos yet. Be the first to submit!</p>
-                    <a href="{{ route('videos.create') }}" class="inline-flex items-center mt-4 px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-brand hover:bg-brand-hover transition-colors">Submit a Video</a>
+                <div class="text-center py-20 glass-panel flex flex-col items-center justify-center">
+                    <div class="w-20 h-20 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 border border-gray-100 dark:border-white/10 shadow-sm">
+                        <svg class="w-10 h-10 text-brand opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No trending videos yet</h3>
+                    <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8">There isn't enough viewership data to show trending videos right now. Be the first to submit something great!</p>
+                    <a href="{{ route('videos.create') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent bg-brand text-white hover:bg-brand-hover rounded-xl font-medium transition-all shadow-sm">
+                        Submit a Video
+                    </a>
                 </div>
             @endif
         </section>
@@ -47,7 +53,7 @@
                 <a href="{{ $yt['youtube_url'] }}" target="_blank" rel="noopener" class="glass-card overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out group flex flex-col h-full">
                     {{-- Thumbnail --}}
                     <div class="relative aspect-video overflow-hidden">
-                        <img src="{{ $yt['thumbnail_url'] }}" alt="{{ $yt['title'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/640x360/111/333?text=Video'">
+                        <img src="{{ $yt['thumbnail_url'] }}" alt="{{ $yt['title'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" onerror="this.src='https://placehold.co/640x360/111/333?text=Video'">
                         <div class="absolute top-3 right-3 px-2 py-1 rounded-md bg-red-600 text-white text-xs font-bold flex items-center gap-1">
                             <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
                             YouTube

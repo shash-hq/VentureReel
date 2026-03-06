@@ -19,16 +19,20 @@ class VideoController extends Controller
     {
         $search = request('search');
         
-        if (request()->has('search') && empty(trim($search))) {
-            return redirect()->back()->withErrors(['search' => 'Please enter a search term to find videos.']);
+        if (request()->has('search')) {
+            // Sanitize: strip HTML tags and remove special characters
+            $search = trim(strip_tags($search));
+            $search = preg_replace('/[^\w\s\-]/', '', $search);
+            
+            if (empty($search)) {
+                return redirect()->back()->withErrors(['search' => 'Please enter a valid search term to find videos.']);
+            }
         }
+
         $categorySlug = request('category');
 
         if ($search && auth()->check()) {
-            \App\Models\SearchHistory::create([
-                'user_id' => auth()->id(),
-                'query' => $search
-            ]);
+            $this->recordSearchHistory($search);
         }
 
         $videos = Video::approved()
@@ -42,52 +46,84 @@ class VideoController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $categories = Category::withCount('approvedVideos')->get();
+        $categories = \Illuminate\Support\Facades\Cache::remember('categories_list', 600, function () {
+            return Category::withCount('approvedVideos')->get();
+        });
 
-        $recommendedVideos = collect();
-        if (!$search && !$categorySlug && auth()->check()) {
-            $latestQueries = \App\Models\SearchHistory::where('user_id', auth()->id())
-                ->latest()
-                ->pluck('query')
-                ->unique()
-                ->take(3);
-
-            if ($latestQueries->isNotEmpty()) {
-                $recommendedVideos = Video::approved()
-                    ->with(['user', 'category'])
-                    ->withCount('likes')
-                    ->where(function ($queryBuilder) use ($latestQueries) {
-                        foreach ($latestQueries as $q) {
-                            $queryBuilder->orWhere('title', 'like', "%{$q}%")
-                                         ->orWhere('description', 'like', "%{$q}%");
-                        }
-                    })
-                    ->latest()
-                    ->take(4)
-                    ->get();
-            }
-        }
+        $recommendedVideos = $this->getRecommendedVideos($search, $categorySlug);
 
         $featuredCollections = collect();
         if (!$search && !$categorySlug) {
-            $featuredCollections = \App\Models\Collection::withCount('videos')->has('videos')->latest()->take(4)->get();
+            $featuredCollections = \Illuminate\Support\Facades\Cache::remember('featured_collections', 600, function () {
+                return \App\Models\Collection::withCount('videos')->has('videos')->latest()->take(4)->get();
+            });
         }
 
         $youtubeResults = [];
         $youtubeCached = false;
+        $youtubeError = false;
         if ($search) {
-            $youtube = app(YouTubeService::class);
-            if ($youtube->isConfigured()) {
-                $searchData = $youtube->searchVideos($search, 12);
-                $youtubeCached = $searchData['cached'] ?? false;
-                $youtubeResults = collect($searchData['results'] ?? [])->filter(function ($ytVideo) use ($videos) {
-                    // Filter out videos we already have locally to avoid duplicates in the same view
-                    return !$videos->contains('youtube_video_id', $ytVideo['video_id']);
-                })->all();
+            try {
+                $youtube = app(YouTubeService::class);
+                if ($youtube->isConfigured()) {
+                    $searchData = $youtube->searchVideos($search, 12);
+                    $youtubeCached = $searchData['cached'] ?? false;
+                    $youtubeResults = collect($searchData['results'] ?? [])->filter(function ($ytVideo) use ($videos) {
+                        // Filter out videos we already have locally to avoid duplicates in the same view
+                        return !$videos->contains('youtube_video_id', $ytVideo['video_id']);
+                    })->all();
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('YouTube API Search Error: ' . $e->getMessage());
+                $youtubeError = true;
             }
         }
 
-        return view('videos.index', compact('videos', 'categories', 'search', 'categorySlug', 'youtubeResults', 'youtubeCached', 'recommendedVideos', 'featuredCollections'));
+        return view('videos.index', compact('videos', 'categories', 'search', 'categorySlug', 'youtubeResults', 'youtubeCached', 'recommendedVideos', 'featuredCollections', 'youtubeError'));
+    }
+
+    /**
+     * Record search history for the authenticated user.
+     */
+    protected function recordSearchHistory(string $search): void
+    {
+        \App\Models\SearchHistory::create([
+            'user_id' => auth()->id(),
+            'query' => $search
+        ]);
+    }
+
+    /**
+     * Retrieve recommended videos based on past search history.
+     */
+    protected function getRecommendedVideos(?string $search, ?string $categorySlug)
+    {
+        if ($search || $categorySlug || !auth()->check()) {
+            return collect();
+        }
+
+        $latestQueries = \App\Models\SearchHistory::where('user_id', auth()->id())
+            ->latest()
+            ->pluck('query')
+            ->unique()
+            ->take(3);
+
+        if ($latestQueries->isEmpty()) {
+            return collect();
+        }
+
+        return Video::approved()
+            ->with(['user', 'category'])
+            ->withCount('likes')
+            ->where(function ($queryBuilder) use ($latestQueries) {
+                foreach ($latestQueries as $q) {
+                    $queryBuilder->orWhere('title', 'like', "%{$q}%")
+                                 ->orWhere('description', 'like', "%{$q}%");
+                }
+            })
+            ->latest()
+            ->take(4)
+            ->get();
     }
 
     /**
@@ -95,30 +131,37 @@ class VideoController extends Controller
      */
     public function importYouTube(\Illuminate\Http\Request $request, string $youtube_id): RedirectResponse
     {
-        // 1. Check if we already have it locally
-        $existingVideo = Video::where('youtube_video_id', $youtube_id)->first();
-        if ($existingVideo) {
-            return redirect()->route('videos.show', $existingVideo);
+        $video = $this->findOrImportYouTubeVideo($youtube_id);
+
+        if (!$video) {
+            return redirect()->route('home')->with('error', 'Unable to fetch video details from YouTube.');
         }
 
-        // 2. We don't have it, so let's fetch full details from YouTube
+        return redirect()->route('videos.show', $video)->with('success', 'Video successfully imported to VentureReel!');
+    }
+
+    /**
+     * Find an existing YouTube video locally, or fetch and create it.
+     */
+    protected function findOrImportYouTubeVideo(string $youtube_id): ?Video
+    {
+        $existingVideo = Video::where('youtube_video_id', $youtube_id)->first();
+        if ($existingVideo) {
+            return $existingVideo;
+        }
+
         $youtube = app(YouTubeService::class);
         $details = $youtube->getVideoDetails($youtube_id);
 
         if (!$details) {
-            return redirect()->route('home')->with('error', 'Unable to fetch video details from YouTube.');
+            return null;
         }
 
-        // 3. Define the uploader (auth user, or fallback to first admin/user for guests)
-        $userId = auth()->id();
-        if (!$userId) {
-            $userId = \App\Models\User::first()->id ?? 1;
-        }
+        $userId = auth()->id() ?: (\App\Models\User::first()->id ?? 1);
 
-        // 4. Create the new video record organically
-        $video = Video::create([
+        return Video::create([
             'user_id' => $userId,
-            'category_id' => null, // Or try to guess / let user categorize later
+            'category_id' => null,
             'title' => $details['title'] ?? 'YouTube Video',
             'slug' => str($details['title'])->slug() . '-' . time(),
             'description' => $details['description'] ?? 'Imported from YouTube.',
@@ -129,12 +172,10 @@ class VideoController extends Controller
             'duration' => $details['duration'] ?? null,
             'entrepreneur_name' => $details['channel_title'] ?? 'Unknown',
             'business_name' => 'YouTube Creator',
-            'is_approved' => true, // Auto-approve organic search imports
+            'is_approved' => true,
             'approved_at' => now(),
-            'views_count' => rand(10, 100), // Start with some organic baseline
+            'views_count' => rand(10, 100),
         ]);
-
-        return redirect()->route('videos.show', $video)->with('success', 'Video successfully imported to VentureReel!');
     }
 
     /**
@@ -184,8 +225,14 @@ class VideoController extends Controller
     /**
      * Display the specified video.
      */
-    public function show(Video $video): View
+    public function show($identifier): View
     {
+        try {
+            $video = Video::where('slug', $identifier)->orWhere('id', $identifier)->firstOrFail();
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         // Only show if approved OR if the owner is viewing
         if (!$video->is_approved && (!auth()->check() || auth()->id() !== $video->user_id)) {
             abort(404);
