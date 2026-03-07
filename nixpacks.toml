@@ -1,5 +1,0 @@
-[variables]
-APP_KEY = "base64:Tgq+QBke7wGqdsrzHRUimiw/tNuSDP8YmKzSBJqWV6s="
-
-[start]
-cmd = "bash start.sh"
