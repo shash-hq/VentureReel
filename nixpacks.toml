@@ -1,5 +1,4 @@
 [variables]
-APP_URL = "http://localhost"
 APP_KEY = "base64:Tgq+QBke7wGqdsrzHRUimiw/tNuSDP8YmKzSBJqWV6s="
 
 [start]
