@@ -12,7 +12,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 RUN npm ci && npm run build
-RUN php artisan optimize
+RUN php artisan config:clear
 
 EXPOSE 8000
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+CMD php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
